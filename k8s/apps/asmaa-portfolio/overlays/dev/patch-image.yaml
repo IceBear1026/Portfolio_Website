@@ -7,4 +7,4 @@ spec:
     spec:
       containers:
         - name: asmaa-portfolio
-          image: asmaa-portfolio:local
+          image: acrportfoldev.azurecr.io/asmaa-portfolio:v1
