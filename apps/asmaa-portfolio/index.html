@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@500;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
 
 <style>
   :root {
@@ -905,13 +907,7 @@
       </div>
 
       <div class="photo-wrap" id="photo-area">
-        <!-- Replace this placeholder with your exported portrait image:
-        <img src="assets/asmaa-portrait.png" alt="Portrait of Asmaa Taki">
-        -->
-        <div class="photo-placeholder">
-          <span class="ph-icon">📸</span>
-          <span>Your photo<br>goes here</span>
-        </div>
+        <img src="assets/portfolio.png" alt="Portrait of Asmaa Taki">
       </div>
 
       <div class="cert-sticker">
@@ -997,7 +993,7 @@
       <div class="projects-grid">
         <article class="project-card" data-number="01">
           <div class="project-media">
-            <img src="FINANCIAL_DASHBOARD.gif" alt="Animated preview of Asmaa Taki's Financial Performance Dashboard">
+            <img src="assets/FINANCIAL_DASHBOARD.gif" alt="Animated preview of Asmaa Taki's Financial Performance Dashboard">
           </div>
           <h3>Financial Performance Dashboard</h3>
           <p>Built an end-to-end analytics pipeline processing 100,000+ rows in PostgreSQL, cleaned and transformed through a 9-step Power Query process, and modeled as a star schema across 5 tables. Delivered a 4-page executive dashboard tracking $92M revenue vs. $87M budget across 6 categories, 5 countries, and 5 years.</p>
@@ -1026,7 +1022,7 @@
       <div class="cert-grid">
         <article class="cert-card">
           <div class="cert-logo-wrap">
-            <img src="pl-300_logo.webp" alt="Microsoft Certified Power BI Data Analyst Associate badge">
+            <img src="assets/pl-300_logo.webp" alt="Microsoft Certified Power BI Data Analyst Associate badge">
           </div>
           <div class="cert-copy">
             <h3>PL-300</h3>
@@ -1036,7 +1032,7 @@
 
         <article class="cert-card">
           <div class="cert-logo-wrap">
-            <img src="DP-600_logo.jpg" alt="Microsoft Certified Fabric Analytics Engineer Associate badge">
+            <img src="assets/DP-600_logo.jpg" alt="Microsoft Certified Fabric Analytics Engineer Associate badge">
           </div>
           <div class="cert-copy">
             <h3>DP-600</h3>
@@ -1046,7 +1042,7 @@
 
         <article class="cert-card">
           <div class="cert-logo-wrap">
-            <img src="google_data_analytics_cert.png" alt="Google Data Analytics Certificate badge">
+            <img src="assets/google_data_analytics_cert.png" alt="Google Data Analytics Certificate badge">
           </div>
           <div class="cert-copy">
             <h3>Google Data Analytics</h3>
@@ -1056,7 +1052,7 @@
 
         <article class="cert-card">
           <div class="cert-logo-wrap">
-            <img src="GCC_badge_PGM_1000x1000.png" alt="Google Project Management Certificate badge">
+            <img src="assets/GCC_badge_PGM_1000x1000.png" alt="Google Project Management Certificate badge">
           </div>
           <div class="cert-copy">
             <h3>Google Project Management</h3>
@@ -1066,7 +1062,7 @@
 
         <article class="cert-card">
           <div class="cert-logo-wrap">
-            <img src="Data_Analysis_and_Visualization_Foundations_Specialization.png" alt="IBM Data Analysis and Visualization Foundations Specialization badge">
+            <img src="assets/Data_Analysis_and_Visualization_Foundations_Specialization.png" alt="IBM Data Analysis and Visualization Foundations Specialization badge">
           </div>
           <div class="cert-copy">
             <h3>IBM Data Visualization</h3>
@@ -1136,18 +1132,23 @@
   </footer>
 
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const yearElement = document.getElementById('year');
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
 
   const photoArea = document.getElementById('photo-area');
-  photoArea.addEventListener('dragover', e => e.preventDefault());
-  photoArea.addEventListener('drop', e => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      const url = URL.createObjectURL(file);
-      photoArea.innerHTML = `<img src="${url}" alt="Portrait of Asmaa Taki">`;
-    }
-  });
+  if (photoArea) {
+    photoArea.addEventListener('dragover', e => e.preventDefault());
+    photoArea.addEventListener('drop', e => {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const url = URL.createObjectURL(file);
+        photoArea.innerHTML = `<img src="${url}" alt="Portrait of Asmaa Taki">`;
+      }
+    });
+  }
 </script>
 </body>
 </html>

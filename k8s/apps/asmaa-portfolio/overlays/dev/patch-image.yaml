@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asmaa-portfolio
+spec:
+  template:
+    spec:
+      containers:
+        - name: asmaa-portfolio
+          image: asmaa-portfolio:local
