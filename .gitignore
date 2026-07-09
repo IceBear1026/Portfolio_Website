@@ -2,7 +2,6 @@
 **/.terraform/*
 *.tfstate
 *.tfstate.*
-*.tfvars
 crash.log
 crash.*.log
 override.tf
@@ -11,3 +10,8 @@ override.tf.json
 *_override.tf.json
 .terraformrc
 terraform.rc
+
+# Ignore all tfvars by default...
+*.tfvars
+# ...but explicitly allow this one back in
+!infra/envs/prod/terraform.tfvars
