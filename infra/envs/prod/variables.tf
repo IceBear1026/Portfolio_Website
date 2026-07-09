@@ -216,3 +216,15 @@ variable "aks_acr_pull_role_definition_name" {
   type        = string
   default     = "AcrPull"
 }
+
+variable "aks_gateway_api_installation" {
+  description = "Managed Gateway API installation mode for AKS."
+  type        = string
+  default     = "Standard"
+}
+
+variable "aks_application_load_balancer_enabled" {
+  description = "Whether to enable Application Gateway for Containers ALB Controller add-on."
+  type        = bool
+  default     = true
+}

@@ -1,0 +1,8 @@
+apiVersion: alb.networking.azure.io/v1
+kind: ApplicationLoadBalancer
+metadata:
+  name: launchmywork-alb
+  namespace: platform-alb
+spec:
+  associations:
+    - /subscriptions/5b984636-2b0c-44e4-83d5-c65f9b6db96a/resourceGroups/MC_rg-launchmywork-prod_aks-launchmywork-prod_eastus/providers/Microsoft.Network/virtualNetworks/aks-vnet-27528754/subnets/aks-appgateway

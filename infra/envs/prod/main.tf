@@ -90,3 +90,11 @@ module "aks" {
 
   tags = var.tags
 }
+
+module "aks_gateway_addons" {
+  source = "../../modules/aks-gateway-addons"
+
+  aks_id                            = module.aks.id
+  gateway_api_installation          = var.aks_gateway_api_installation
+  application_load_balancer_enabled = var.aks_application_load_balancer_enabled
+}

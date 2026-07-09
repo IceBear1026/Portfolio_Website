@@ -7,6 +7,11 @@ terraform {
       # "any 5.x version"
       version = "~> 4.0"
     }
+
+    azapi = {
+      source  = "Azure/azapi"
+      version = "~> 2.0"
+    }
   }
 }
 
@@ -18,3 +23,5 @@ provider "azurerm" {
 # Use the AzureRM provider
 # Use provider version x.0 or higher
 # Deploy resources into Azure
+
+provider "azapi" {}
