@@ -31,7 +31,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     network_policy      = var.network_policy
     load_balancer_sku   = var.load_balancer_sku
     outbound_type       = var.outbound_type
-
+    network_data_plane = var.network_data_plane
     pod_cidr       = var.pod_cidr
     service_cidr   = var.service_cidr
     dns_service_ip = var.dns_service_ip

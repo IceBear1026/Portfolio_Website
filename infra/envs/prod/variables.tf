@@ -228,3 +228,9 @@ variable "aks_application_load_balancer_enabled" {
   type        = bool
   default     = true
 }
+
+variable "aks_network_data_plane" {
+  description = "AKS network dataplane."
+  type        = string
+  default     = "cilium"
+}

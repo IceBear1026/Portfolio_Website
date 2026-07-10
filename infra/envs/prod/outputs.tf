@@ -53,7 +53,7 @@ output "aks_kubelet_identity_object_id" {
   value       = module.aks.kubelet_identity_object_id
 }
 
-output "aks_gateway_addons_id" {
-  description = "Terraform AzAPI update resource ID for AKS Gateway API and Application Gateway for Containers add-ons."
-  value       = module.aks_gateway_addons.id
-}
+# Archived with the AGC add-on module.
+# output "aks_gateway_addons_id" {
+#   value = module.aks_gateway_addons.id
+# }

@@ -82,15 +82,15 @@ module "aks" {
 
   identity_type = var.aks_identity_type
 
-  network_plugin      = var.aks_network_plugin
-  network_plugin_mode = var.aks_network_plugin_mode
-  network_policy      = var.aks_network_policy
-  load_balancer_sku   = var.aks_load_balancer_sku
-  outbound_type       = var.aks_outbound_type
-  pod_cidr            = var.aks_pod_cidr
-  service_cidr        = var.aks_service_cidr
-  dns_service_ip      = var.aks_dns_service_ip
-
+  network_plugin                     = var.aks_network_plugin
+  network_plugin_mode                = var.aks_network_plugin_mode
+  network_policy                     = var.aks_network_policy
+  load_balancer_sku                  = var.aks_load_balancer_sku
+  outbound_type                      = var.aks_outbound_type
+  pod_cidr                           = var.aks_pod_cidr
+  service_cidr                       = var.aks_service_cidr
+  dns_service_ip                     = var.aks_dns_service_ip
+  network_data_plane                 = var.aks_network_data_plane
   key_vault_secret_rotation_enabled  = var.aks_key_vault_secret_rotation_enabled
   key_vault_secret_rotation_interval = var.aks_key_vault_secret_rotation_interval
 
@@ -100,10 +100,21 @@ module "aks" {
   tags = var.tags
 }
 
+# ---------------------------------------------------------------------------
+# ARCHIVED / DISABLING: Azure Application Gateway for Containers
+#
+# This module originally enabled:
+# Cloudflare -> Application Gateway for Containers -> Gateway API -> HTTPRoute.
+#
+# It worked successfully, but we are disabling it to reduce dev hosting cost.
+# Keep this block temporarily so Terraform can explicitly patch AGC off.
+# After Azure confirms the add-on is disabled, we can remove this module from
+# active configuration and keep the module/folder as archived documentation.
+# ---------------------------------------------------------------------------
 module "aks_gateway_addons" {
   source = "../../modules/aks-gateway-addons"
 
   aks_id                            = module.aks.id
-  gateway_api_installation          = var.aks_gateway_api_installation
-  application_load_balancer_enabled = var.aks_application_load_balancer_enabled
+  application_load_balancer_enabled = false
+  gateway_api_installation          = "None"
 }

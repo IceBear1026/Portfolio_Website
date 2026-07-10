@@ -171,3 +171,14 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "network_data_plane" {
+  description = "AKS network data plane. Use azure for default Azure dataplane or cilium for Azure CNI Powered by Cilium."
+  type        = string
+  default     = "azure"
+
+  validation {
+    condition     = contains(["azure", "cilium"], var.network_data_plane)
+    error_message = "network_data_plane must be either azure or cilium."
+  }
+}
