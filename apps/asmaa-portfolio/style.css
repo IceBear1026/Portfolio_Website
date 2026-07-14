@@ -764,20 +764,38 @@ a {
   overflow: hidden;
   border: 1px solid var(--line);
   background: var(--surface);
+  aspect-ratio: 16 / 9;
 }
 
 .slider-track {
   display: flex;
+  height: 100%;
   transition: transform 0.35s ease;
 }
 
 .slide {
   width: 100%;
+  height: 100%;
   flex: 0 0 100%;
-  aspect-ratio: 16 / 9;
   object-fit: cover;
   display: block;
   background: var(--ink);
+}
+
+/* Financial screenshots include full dashboard pages and a wide model view.
+   Contain prevents Power BI content from being cropped by the 16:9 frame. */
+#financial-slider .slider-window {
+  background: #082844;
+}
+
+#financial-slider .slide {
+  object-fit: contain;
+  background: #082844;
+}
+
+/* Funnel screenshots can continue filling the entire frame. */
+#funnel-slider .slide {
+  object-fit: cover;
 }
 
 .slider-btn {
@@ -1298,4 +1316,325 @@ a {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Click-to-expand project gallery */
+.zoomable-project-image {
+  cursor: zoom-in;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+.zoomable-project-image:hover {
+  filter: brightness(0.94);
+}
+
+.zoomable-project-image:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+body.lightbox-open {
+  overflow: hidden;
+}
+
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: clamp(0.65rem, 2vw, 1.5rem);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, visibility 180ms ease;
+}
+
+.image-lightbox.is-open {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 8, 7, 0.92);
+  backdrop-filter: blur(10px);
+}
+
+.lightbox-panel {
+  position: relative;
+  z-index: 1;
+  width: min(96vw, 1600px);
+  height: min(94vh, 1000px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+.lightbox-panel:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  border: 0;
+}
+
+.lightbox-toolbar {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0.7rem 0.55rem 1rem;
+  background: rgba(17, 17, 17, 0.96);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.lightbox-caption {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.lightbox-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+}
+
+.lightbox-tool,
+.lightbox-nav {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.lightbox-tool {
+  min-width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  padding: 0 0.72rem;
+  font: inherit;
+  font-size: 1.1rem;
+}
+
+.lightbox-tool:hover,
+.lightbox-tool:focus-visible,
+.lightbox-nav:hover,
+.lightbox-nav:focus-visible {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.5);
+  outline: none;
+}
+
+.lightbox-tool:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.lightbox-zoom-level {
+  min-width: 66px;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+}
+
+.lightbox-close {
+  font-size: 1.45rem;
+}
+
+.lightbox-content {
+  min-height: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: stretch;
+  background:
+    linear-gradient(45deg, rgba(255,255,255,0.025) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255,255,255,0.025) 25%, transparent 25%),
+    #090909;
+  background-size: 24px 24px;
+}
+
+.lightbox-stage {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  cursor: default;
+  touch-action: none;
+  user-select: none;
+}
+
+.lightbox-stage:has(#lightbox-image.is-zoomed) {
+  cursor: grab;
+}
+
+.lightbox-stage.is-dragging {
+  cursor: grabbing;
+}
+
+#lightbox-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transform-origin: center center;
+  transition: transform 120ms ease;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.lightbox-stage.is-dragging #lightbox-image {
+  transition: none;
+}
+
+.lightbox-nav {
+  align-self: center;
+  z-index: 2;
+  width: 48px;
+  height: 72px;
+  margin: 0 0.65rem;
+  border-radius: 999px;
+  font-size: 1.3rem;
+}
+
+.lightbox-nav[hidden] {
+  display: none;
+}
+
+.lightbox-help {
+  min-height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0.45rem 1rem;
+  background: rgba(17, 17, 17, 0.96);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .image-lightbox {
+    padding: 0;
+  }
+
+  .lightbox-panel {
+    width: 100vw;
+    height: 100vh;
+    border: 0;
+  }
+
+  .lightbox-toolbar {
+    align-items: flex-start;
+    padding: 0.55rem;
+  }
+
+  .lightbox-caption {
+    display: none;
+  }
+
+  .lightbox-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .lightbox-tool {
+    min-width: 38px;
+    height: 38px;
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 58px;
+    margin: 0;
+  }
+
+  .lightbox-prev {
+    left: 0.45rem;
+  }
+
+  .lightbox-next {
+    right: 0.45rem;
+  }
+
+  .lightbox-content {
+    display: block;
+  }
+
+  .lightbox-stage {
+    width: 100%;
+    height: 100%;
+  }
+
+  .lightbox-help {
+    font-size: 0.61rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-lightbox,
+  #lightbox-image {
+    transition: none;
+  }
+}
+
+
+/* Slider control click fix */
+.project-slider {
+  isolation: isolate;
+}
+
+.slider-window {
+  position: relative;
+  z-index: 1;
+}
+
+.slider-track,
+.zoomable-project-image {
+  position: relative;
+  z-index: 1;
+}
+
+.slider-btn {
+  z-index: 30;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.slider-dots {
+  position: relative;
+  z-index: 30;
+  pointer-events: auto;
+}
+
+.slider-dots .dot {
+  position: relative;
+  z-index: 31;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.project-card::before {
+  pointer-events: none;
 }

@@ -187,9 +187,30 @@
 
       <div class="projects-grid">
         <article class="project-card" data-number="01">
-          <div class="project-media">
-            <img src="assets/FINANCIAL_DASHBOARD.gif" alt="Animated preview of Asmaa Taki's Financial Performance Dashboard">
+          <div class="project-slider" id="financial-slider">
+            <button class="slider-btn prev" type="button" aria-label="Previous financial dashboard image">&#10094;</button>
+
+            <div class="slider-window">
+              <div class="slider-track">
+                <img class="slide" src="assets/FINANCIAL_DASHBOARD.gif" alt="Animated preview of the Financial Performance Dashboard">
+                <img class="slide" src="assets/financial_welcome.jpg" alt="Financial dashboard welcome and navigation page" loading="lazy">
+                <img class="slide" src="assets/financial_executive_overview.jpg" alt="Financial dashboard executive overview page" loading="lazy">
+                <img class="slide" src="assets/financial_operational_performance.jpg" alt="Financial dashboard operational performance page" loading="lazy">
+                <img class="slide" src="assets/financial_model.png" alt="Power BI star schema and financial data model" loading="lazy">
+              </div>
+            </div>
+
+            <button class="slider-btn next" type="button" aria-label="Next financial dashboard image">&#10095;</button>
+
+            <div class="slider-dots">
+              <button class="dot active" type="button" aria-label="Go to financial slide 1"></button>
+              <button class="dot" type="button" aria-label="Go to financial slide 2"></button>
+              <button class="dot" type="button" aria-label="Go to financial slide 3"></button>
+              <button class="dot" type="button" aria-label="Go to financial slide 4"></button>
+              <button class="dot" type="button" aria-label="Go to financial slide 5"></button>
+            </div>
           </div>
+
           <h3>Financial Performance Dashboard</h3>
           <p>Built an end-to-end analytics pipeline processing 100,000+ rows in PostgreSQL, cleaned and transformed through a 9-step Power Query process, and modeled as a star schema across 5 tables. Delivered a 4-page executive dashboard tracking $92M revenue vs. $87M budget across 6 categories, 5 countries, and 5 years.</p>
           <div class="tags"><span class="tag">PostgreSQL</span><span class="tag">Power Query</span><span class="tag">Star Schema</span><span class="tag">40+ DAX Measures</span></div>
@@ -201,10 +222,10 @@
 
   <div class="slider-window">
     <div class="slider-track">
-      <img class="slide" src="assets/funnel_model.png" alt="Marketing Funnel Analytics Power BI data model">
-      <img class="slide" src="assets/funnel_code.png" alt="Marketing Funnel Analytics custom HTML landing page code">
       <img class="slide" src="assets/funnel_landing.png" alt="Marketing Funnel Analytics dashboard landing page">
       <img class="slide" src="assets/funnel_dashboard.png" alt="Marketing Funnel Analytics dashboard report page">
+      <img class="slide" src="assets/funnel_model.png" alt="Marketing Funnel Analytics Power BI data model">
+      <img class="slide" src="assets/funnel_code.png" alt="Marketing Funnel Analytics custom HTML landing page code">
     </div>
   </div>
 
@@ -406,6 +427,42 @@
     <span>Business Analyst / BI Engineer · Maryland, USA</span>
   </footer>
 
+<div class="image-lightbox" id="image-lightbox" aria-hidden="true">
+    <div class="lightbox-backdrop" data-lightbox-close></div>
+
+    <section
+      class="lightbox-panel"
+      id="lightbox-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="lightbox-caption"
+    >
+      <header class="lightbox-toolbar">
+        <p class="lightbox-caption" id="lightbox-caption">Expanded project image</p>
+
+        <div class="lightbox-actions" aria-label="Image controls">
+          <button class="lightbox-tool" id="lightbox-zoom-out" type="button" aria-label="Zoom out">−</button>
+          <button class="lightbox-tool lightbox-zoom-level" id="lightbox-zoom-level" type="button" aria-label="Reset zoom">100%</button>
+          <button class="lightbox-tool" id="lightbox-zoom-in" type="button" aria-label="Zoom in">+</button>
+          <button class="lightbox-tool" id="lightbox-fullscreen" type="button" aria-label="Enter full screen">⛶</button>
+          <button class="lightbox-tool lightbox-close" id="lightbox-close" type="button" aria-label="Close expanded image">×</button>
+        </div>
+      </header>
+
+      <div class="lightbox-content">
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev" type="button" aria-label="Previous image">&#10094;</button>
+
+        <div class="lightbox-stage" id="lightbox-stage">
+          <img id="lightbox-image" src="" alt="" draggable="false">
+        </div>
+
+        <button class="lightbox-nav lightbox-next" id="lightbox-next" type="button" aria-label="Next image">&#10095;</button>
+      </div>
+
+      <p class="lightbox-help">Click the image to enlarge · scroll or use +/− to zoom · drag to move · Esc to close</p>
+    </section>
+  </div>
+
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -423,14 +480,14 @@
       portraitPhoto.src = url;
     }
   });
-    const funnelSlider = document.getElementById('funnel-slider');
+  function initializeProjectSlider(slider) {
+    const track = slider.querySelector('.slider-track');
+    const slides = slider.querySelectorAll('.slide');
+    const prevBtn = slider.querySelector('.prev');
+    const nextBtn = slider.querySelector('.next');
+    const dots = slider.querySelectorAll('.dot');
 
-  if (funnelSlider) {
-    const track = funnelSlider.querySelector('.slider-track');
-    const slides = funnelSlider.querySelectorAll('.slide');
-    const prevBtn = funnelSlider.querySelector('.prev');
-    const nextBtn = funnelSlider.querySelector('.next');
-    const dots = funnelSlider.querySelectorAll('.dot');
+    if (!track || slides.length === 0 || !prevBtn || !nextBtn) return;
 
     let currentSlide = 0;
 
@@ -439,28 +496,332 @@
 
       dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === currentSlide);
+        dot.setAttribute('aria-current', index === currentSlide ? 'true' : 'false');
       });
     }
 
-    prevBtn.addEventListener('click', () => {
+    prevBtn.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
       currentSlide = (currentSlide - 1 + slides.length) % slides.length;
       updateSlider();
     });
 
-    nextBtn.addEventListener('click', () => {
+    nextBtn.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
       currentSlide = (currentSlide + 1) % slides.length;
       updateSlider();
     });
 
     dots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
+      dot.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
         currentSlide = index;
         updateSlider();
       });
     });
 
+    [prevBtn, nextBtn, ...dots].forEach(control => {
+      control.addEventListener('pointerdown', event => {
+        event.stopPropagation();
+      });
+    });
+
+    slider.addEventListener('keydown', event => {
+      if (event.target.closest('button')) return;
+
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        prevBtn.click();
+      }
+
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        nextBtn.click();
+      }
+    });
+
+    slider.setAttribute('tabindex', '0');
     updateSlider();
   }
+
+  document.querySelectorAll('.project-slider').forEach(initializeProjectSlider);
+
+  function initializeImageLightbox() {
+    const lightbox = document.getElementById('image-lightbox');
+    const panel = document.getElementById('lightbox-panel');
+    const stage = document.getElementById('lightbox-stage');
+    const expandedImage = document.getElementById('lightbox-image');
+    const caption = document.getElementById('lightbox-caption');
+    const closeButton = document.getElementById('lightbox-close');
+    const previousButton = document.getElementById('lightbox-prev');
+    const nextButton = document.getElementById('lightbox-next');
+    const zoomInButton = document.getElementById('lightbox-zoom-in');
+    const zoomOutButton = document.getElementById('lightbox-zoom-out');
+    const zoomLevelButton = document.getElementById('lightbox-zoom-level');
+    const fullscreenButton = document.getElementById('lightbox-fullscreen');
+
+    if (!lightbox || !panel || !stage || !expandedImage) return;
+
+    const clickableImages = Array.from(
+      document.querySelectorAll(
+        '.project-slider .slide, .project-media img, .project-gallery img'
+      )
+    );
+
+    let imageGroup = [];
+    let currentIndex = 0;
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let previousFocus = null;
+
+    const minimumScale = 1;
+    const maximumScale = 5;
+    const zoomStep = 0.25;
+
+    function applyTransform() {
+      expandedImage.style.transform =
+        `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
+
+      expandedImage.classList.toggle('is-zoomed', scale > 1);
+      zoomLevelButton.textContent = `${Math.round(scale * 100)}%`;
+      zoomOutButton.disabled = scale <= minimumScale;
+      zoomInButton.disabled = scale >= maximumScale;
+    }
+
+    function resetZoom() {
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
+      applyTransform();
+    }
+
+    function setScale(nextScale) {
+      scale = Math.min(maximumScale, Math.max(minimumScale, nextScale));
+
+      if (scale === 1) {
+        translateX = 0;
+        translateY = 0;
+      }
+
+      applyTransform();
+    }
+
+    function getImageGroup(clickedImage) {
+      const projectCard = clickedImage.closest('.project-card');
+
+      if (!projectCard) return [clickedImage];
+
+      return Array.from(
+        projectCard.querySelectorAll(
+          '.project-slider .slide, .project-media img, .project-gallery img'
+        )
+      );
+    }
+
+    function updateNavigation() {
+      const hasMultipleImages = imageGroup.length > 1;
+      previousButton.hidden = !hasMultipleImages;
+      nextButton.hidden = !hasMultipleImages;
+    }
+
+    function showImage(index) {
+      if (!imageGroup.length) return;
+
+      currentIndex = (index + imageGroup.length) % imageGroup.length;
+      const sourceImage = imageGroup[currentIndex];
+
+      expandedImage.src = sourceImage.currentSrc || sourceImage.src;
+      expandedImage.alt = sourceImage.alt || 'Expanded project image';
+      caption.textContent = sourceImage.alt || 'Expanded project image';
+
+      resetZoom();
+      updateNavigation();
+    }
+
+    function openLightbox(clickedImage) {
+      imageGroup = getImageGroup(clickedImage);
+      currentIndex = Math.max(0, imageGroup.indexOf(clickedImage));
+      previousFocus = document.activeElement;
+
+      showImage(currentIndex);
+
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('lightbox-open');
+      closeButton.focus();
+    }
+
+    function closeLightbox() {
+      if (!lightbox.classList.contains('is-open')) return;
+
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('lightbox-open');
+      expandedImage.src = '';
+      resetZoom();
+
+      if (previousFocus && typeof previousFocus.focus === 'function') {
+        previousFocus.focus();
+      }
+    }
+
+    function showPreviousImage() {
+      showImage(currentIndex - 1);
+    }
+
+    function showNextImage() {
+      showImage(currentIndex + 1);
+    }
+
+    clickableImages.forEach(image => {
+      image.classList.add('zoomable-project-image');
+      image.setAttribute('tabindex', '0');
+      image.setAttribute('role', 'button');
+      image.setAttribute('aria-label', `${image.alt || 'Project image'} — open full-screen viewer`);
+
+      image.addEventListener('click', () => openLightbox(image));
+
+      image.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openLightbox(image);
+        }
+      });
+    });
+
+    closeButton.addEventListener('click', closeLightbox);
+    previousButton.addEventListener('click', showPreviousImage);
+    nextButton.addEventListener('click', showNextImage);
+
+    lightbox.querySelectorAll('[data-lightbox-close]').forEach(element => {
+      element.addEventListener('click', closeLightbox);
+    });
+
+    zoomInButton.addEventListener('click', () => setScale(scale + zoomStep));
+    zoomOutButton.addEventListener('click', () => setScale(scale - zoomStep));
+    zoomLevelButton.addEventListener('click', resetZoom);
+
+    fullscreenButton.addEventListener('click', async () => {
+      try {
+        if (!document.fullscreenElement) {
+          await panel.requestFullscreen();
+        } else {
+          await document.exitFullscreen();
+        }
+      } catch (error) {
+        console.warn('Full-screen mode is not available in this browser.', error);
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      const isFullscreen = Boolean(document.fullscreenElement);
+      fullscreenButton.textContent = isFullscreen ? '⛶' : '⛶';
+      fullscreenButton.setAttribute(
+        'aria-label',
+        isFullscreen ? 'Exit full screen' : 'Enter full screen'
+      );
+    });
+
+    stage.addEventListener(
+      'wheel',
+      event => {
+        event.preventDefault();
+        const direction = event.deltaY < 0 ? zoomStep : -zoomStep;
+        setScale(scale + direction);
+      },
+      { passive: false }
+    );
+
+    stage.addEventListener('dblclick', () => {
+      if (scale === 1) {
+        setScale(2);
+      } else {
+        resetZoom();
+      }
+    });
+
+    stage.addEventListener('pointerdown', event => {
+      if (scale <= 1) return;
+
+      isDragging = true;
+      dragStartX = event.clientX - translateX;
+      dragStartY = event.clientY - translateY;
+      stage.classList.add('is-dragging');
+      stage.setPointerCapture(event.pointerId);
+    });
+
+    stage.addEventListener('pointermove', event => {
+      if (!isDragging) return;
+
+      translateX = event.clientX - dragStartX;
+      translateY = event.clientY - dragStartY;
+      applyTransform();
+    });
+
+    function stopDragging(event) {
+      if (!isDragging) return;
+
+      isDragging = false;
+      stage.classList.remove('is-dragging');
+
+      if (event.pointerId !== undefined && stage.hasPointerCapture(event.pointerId)) {
+        stage.releasePointerCapture(event.pointerId);
+      }
+    }
+
+    stage.addEventListener('pointerup', stopDragging);
+    stage.addEventListener('pointercancel', stopDragging);
+    stage.addEventListener('pointerleave', event => {
+      if (isDragging && event.buttons === 0) {
+        stopDragging(event);
+      }
+    });
+
+    document.addEventListener('keydown', event => {
+      if (!lightbox.classList.contains('is-open')) return;
+
+      switch (event.key) {
+        case 'Escape':
+          closeLightbox();
+          break;
+        case 'ArrowLeft':
+          event.preventDefault();
+          showPreviousImage();
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          showNextImage();
+          break;
+        case '+':
+        case '=':
+          event.preventDefault();
+          setScale(scale + zoomStep);
+          break;
+        case '-':
+        case '_':
+          event.preventDefault();
+          setScale(scale - zoomStep);
+          break;
+        case '0':
+          event.preventDefault();
+          resetZoom();
+          break;
+      }
+    });
+  }
+
+  initializeImageLightbox();
 </script>
 </body>
 </html>
