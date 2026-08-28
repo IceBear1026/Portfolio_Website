@@ -618,12 +618,18 @@ a {
   color: var(--ink-mid);
 }
 
+/* =========================================================
+   ABOUT CONTENT
+   Single-column layout after removing Quick Facts.
+========================================================= */
+
 .about-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.75fr);
-  gap: clamp(2rem, 7vw, 6rem);
-  align-items: start;
+  display: block;
   margin-top: 3rem;
+}
+
+.about-grid .body-copy {
+  max-width: 950px;
 }
 
 .paper-card {
@@ -689,7 +695,262 @@ a {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+/* =========================================================
+   IMPACT STRIP
+   Compact editorial section between About and Skills.
+   Shows measurable results without looking like KPI cards.
+========================================================= */
 
+.impact-strip {
+  position: relative;
+  margin: 0 5vw;
+  padding: clamp(2rem, 4vw, 3.5rem);
+  background: var(--ink);
+  color: var(--surface);
+  overflow: hidden;
+  border: 1px solid var(--ink);
+}
+
+
+/* ---------------------------------------------------------
+   BACKGROUND NUMBER DETAIL
+   Very faint editorial decoration behind the stats.
+--------------------------------------------------------- */
+
+.impact-strip::after {
+  content: '04';
+  position: absolute;
+  right: -1rem;
+  bottom: -3rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(10rem, 22vw, 22rem);
+  line-height: 0.8;
+  color: rgba(255, 255, 255, 0.025);
+  pointer-events: none;
+  user-select: none;
+}
+
+
+/* ---------------------------------------------------------
+   IMPACT HEADER
+--------------------------------------------------------- */
+
+.impact-heading {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+
+.impact-kicker {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--surface);
+}
+
+
+.impact-note {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  color: var(--accent-light);
+  transform: rotate(-2deg);
+}
+
+
+/* ---------------------------------------------------------
+   FOUR-COLUMN IMPACT GRID
+--------------------------------------------------------- */
+
+.impact-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+
+/* ---------------------------------------------------------
+   INDIVIDUAL STAT
+--------------------------------------------------------- */
+
+.impact-item {
+  position: relative;
+  min-height: 180px;
+  padding: 1rem clamp(1rem, 2vw, 1.7rem);
+  border-left: 1px solid rgba(250, 247, 242, 0.18);
+}
+
+
+.impact-item:first-child {
+  border-left: 0;
+}
+
+
+/* ---------------------------------------------------------
+   LARGE NUMBER
+--------------------------------------------------------- */
+
+.impact-number {
+  display: block;
+  margin-bottom: 0.65rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.6rem, 6vw, 6.4rem);
+  line-height: 0.85;
+  letter-spacing: 0.02em;
+  color: var(--surface);
+}
+
+
+/* Small upward arrow beside growth result */
+
+.impact-arrow {
+  display: inline-block;
+  margin-left: 0.15rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.35em;
+  vertical-align: top;
+  color: var(--accent-light);
+}
+
+
+/* ---------------------------------------------------------
+   STAT LABEL
+--------------------------------------------------------- */
+
+.impact-item h3 {
+  margin-bottom: 0.55rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+}
+
+
+/* ---------------------------------------------------------
+   STAT CONTEXT
+--------------------------------------------------------- */
+
+.impact-item p {
+  max-width: 210px;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: rgba(250, 247, 242, 0.63);
+}
+
+
+/* ---------------------------------------------------------
+   FEATURED STAT
+   Adds a subtle accent behind the 4× result.
+--------------------------------------------------------- */
+
+.impact-item-featured::before {
+  content: '';
+  position: absolute;
+  inset: 0.35rem;
+  z-index: -1;
+  background: rgba(125, 90, 68, 0.26);
+  transform: rotate(-1deg);
+}
+
+
+/* ---------------------------------------------------------
+   SMALL HAND-DRAWN ACCENT
+--------------------------------------------------------- */
+
+.impact-item:nth-child(2)::after {
+  content: '';
+  position: absolute;
+  left: 1.4rem;
+  top: 5.9rem;
+  width: 52px;
+  height: 4px;
+  border-bottom: 2px solid var(--accent-light);
+  border-radius: 50%;
+  transform: rotate(-4deg);
+  opacity: 0.7;
+}
+
+
+/* =========================================================
+   IMPACT STRIP — TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .impact-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .impact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .impact-item {
+    border-left: 1px solid rgba(250, 247, 242, 0.18);
+    border-top: 1px solid rgba(250, 247, 242, 0.18);
+  }
+
+  .impact-item:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .impact-item:nth-child(-n + 2) {
+    border-top: 0;
+  }
+
+}
+
+
+/* =========================================================
+   IMPACT STRIP — MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .impact-strip {
+    margin: 0;
+    padding: 2rem 5vw;
+  }
+
+  .impact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .impact-item {
+    min-height: auto;
+    padding: 1.5rem 0;
+    border-left: 0;
+    border-top: 1px solid rgba(250, 247, 242, 0.18);
+  }
+
+  .impact-item:first-child {
+    border-top: 0;
+  }
+
+  .impact-number {
+    font-size: clamp(4rem, 20vw, 6rem);
+  }
+
+  .impact-item p {
+    max-width: 320px;
+  }
+
+  .impact-item-featured::before {
+    inset: 0.5rem -1rem;
+  }
+
+}
 .skills-grid,
 .projects-grid,
 .cert-grid {
