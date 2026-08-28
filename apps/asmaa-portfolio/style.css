@@ -663,7 +663,7 @@ a {
 
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 2.25rem;
 }
@@ -1089,37 +1089,404 @@ a {
   background: rgba(255, 255, 255, 0.35);
 }
 
-.timeline {
+/* =========================================================
+   EXPERIENCE — EDITORIAL CAREER TIMELINE
+   Purpose: controls the entire Experience section.
+   Layout rule: odd cards = LEFT, even cards = RIGHT.
+   This keeps the timeline consistent automatically as new roles are added.
+========================================================= */
+
+/* EXPERIENCE SECTION WRAPPER
+   Adds the decorative circle + oversized vertical EXPERIENCE word. */
+.experience-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.experience-section::before {
+  content: '';
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border: 1px solid rgba(125, 90, 68, 0.13);
+  border-radius: 50%;
+  top: 8%;
+  right: -160px;
+  pointer-events: none;
+}
+
+.experience-section::after {
+  content: 'EXPERIENCE';
+  position: absolute;
+  right: -2rem;
+  top: 40%;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(7rem, 14vw, 14rem);
+  letter-spacing: 0.05em;
+  color: rgba(125, 90, 68, 0.035);
+  transform: rotate(90deg);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* EXPERIENCE HEADER
+   Keeps the section title on the left and handwritten note on the right. */
+.experience-header {
+  position: relative;
+  z-index: 2;
   display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 3rem;
+  align-items: end;
+}
+
+/* HANDWRITTEN HEADER NOTE
+   Example text: "the plot so far..." */
+.experience-note {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1.45rem;
+  color: var(--accent);
+  transform: rotate(3deg);
+}
+
+.experience-note-star {
+  font-size: 1rem;
+}
+
+/* TIMELINE CONTAINER
+   Centers the career timeline and creates room for the cards. */
+.career-timeline {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  margin: 5rem auto 0;
+  padding: 1rem 0 3rem;
+}
+
+/* CENTER VERTICAL LINE */
+.career-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--accent-light) 5%,
+    var(--accent-light) 95%,
+    transparent
+  );
+}
+
+/* EACH EXPERIENCE ENTRY
+   Every role takes half of the timeline width on desktop. */
+.career-entry {
+  position: relative;
+  width: 50%;
+  margin-bottom: 4.4rem;
+}
+
+/* =========================================================
+   AUTOMATIC LEFT / RIGHT ALTERNATION
+   1st, 3rd, 5th... = LEFT
+   2nd, 4th, 6th... = RIGHT
+========================================================= */
+
+/* ODD ENTRIES — LEFT SIDE */
+.career-entry:nth-child(odd) {
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 4rem;
+}
+
+/* EVEN ENTRIES — RIGHT SIDE */
+.career-entry:nth-child(even) {
+  margin-left: 50%;
+  padding-left: 4rem;
+  padding-right: 0;
+}
+
+/* TIMELINE DOT
+   Small circle where each role connects to the center line. */
+.career-dot {
+  position: absolute;
+  top: 3rem;
+  width: 15px;
+  height: 15px;
+  border: 3px solid var(--cream);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+  z-index: 5;
+}
+
+.career-entry:nth-child(odd) .career-dot {
+  left: auto;
+  right: -7px;
+}
+
+.career-entry:nth-child(even) .career-dot {
+  right: auto;
+  left: -7px;
+}
+
+/* CONNECTOR LINE
+   Horizontal line from each card to the center timeline. */
+.career-entry::after {
+  content: '';
+  position: absolute;
+  top: 3.45rem;
+  width: 3.15rem;
+  height: 1px;
+  background: var(--accent-light);
+}
+
+.career-entry:nth-child(odd)::after {
+  left: auto;
+  right: 0;
+}
+
+.career-entry:nth-child(even)::after {
+  right: auto;
+  left: 0;
+}
+
+/* LARGE BACKGROUND NUMBER
+   Displays 01, 02, 03... behind each card. */
+.career-number {
+  position: absolute;
+  top: -2.7rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(5rem, 8vw, 8rem);
+  line-height: 1;
+  color: rgba(125, 90, 68, 0.12);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.career-entry:nth-child(odd) .career-number {
+  left: auto;
+  right: 4rem;
+}
+
+.career-entry:nth-child(even) .career-number {
+  right: auto;
+  left: 4rem;
+}
+
+/* EXPERIENCE CARD
+   Main paper-style content box for each role. */
+.career-card {
+  position: relative;
+  z-index: 2;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: clamp(1.5rem, 2.5vw, 2rem);
+  box-shadow: 5px 5px 0 rgba(26, 20, 16, 0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+/* Tiny opposite rotations create the editorial scrapbook feel. */
+.career-entry:nth-child(odd) .career-card {
+  transform: rotate(-0.6deg);
+}
+
+.career-entry:nth-child(even) .career-card {
+  transform: rotate(0.6deg);
+}
+
+.career-card:hover {
+  transform: translate(-4px, -4px) rotate(0deg);
+  border-color: var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+
+/* CURRENT ROLE EMPHASIS
+   Used on Volution and Nuri cards. */
+.current-role .career-card {
+  border: 1.5px solid var(--ink);
+}
+
+.current-role .career-dot {
+  width: 19px;
+  height: 19px;
+  background: var(--ink);
+}
+
+/* CARD TOP ROW
+   Holds the date and leaves space for stickers. */
+.career-card-top {
+  min-height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   gap: 1rem;
-  max-width: 900px;
-  margin-top: 3rem;
 }
 
-.timeline-item {
-  display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
-  gap: 1.5rem;
-  padding: 1.3rem 0;
-  border-top: 1px solid var(--line);
-}
-
-.timeline-date {
-  font-size: 0.75rem;
-  color: var(--ink-light);
-  letter-spacing: 0.1em;
+/* ROLE DATE */
+.career-date {
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  color: var(--ink-light);
 }
 
-.timeline-content h3 {
-  font-size: 1.05rem;
-  margin-bottom: 0.35rem;
+/* NOW STICKER
+   Add <span class="current-sticker">NOW ✦</span> inside current role cards. */
+.current-sticker {
+  position: absolute;
+  top: -13px;
+  right: 18px;
+  padding: 0.32rem 0.68rem;
+  background: var(--ink);
+  color: var(--surface);
+  font-family: 'Caveat', cursive;
+  font-size: 1rem;
+  transform: rotate(4deg);
+  box-shadow: 3px 3px 0 var(--accent);
+}
+
+/* COMPANY / ORGANIZATION LABEL */
+.career-company {
+  margin-top: 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* JOB TITLE */
+.career-card h3 {
+  margin-top: 0.35rem;
+  margin-bottom: 0.85rem;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(1.65rem, 2.3vw, 2.15rem);
   color: var(--ink);
+  line-height: 1.05;
 }
 
-.timeline-content p {
+/* EXPERIENCE DESCRIPTION */
+.career-description {
   color: var(--ink-mid);
-  line-height: 1.65;
+  line-height: 1.7;
+  font-size: 0.94rem;
+}
+
+.career-description-secondary {
+  margin-top: 0.8rem;
+}
+
+/* EXPERIENCE SKILL TAGS */
+.experience-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+}
+
+.experience-tags span {
+  padding: 0.32rem 0.58rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.38);
+  color: var(--ink-mid);
+  font-size: 0.67rem;
+}
+
+/* HANDWRITTEN CARD NOTES
+   Example: "growth + data + a little creativity ✦" */
+.career-scribble {
+  position: absolute;
+  bottom: -2rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1rem;
+  color: var(--accent);
+  opacity: 0.85;
+}
+
+.career-entry:nth-child(odd) .career-scribble {
+  left: auto;
+  right: 1rem;
+  transform: rotate(-3deg);
+}
+
+.career-entry:nth-child(even) .career-scribble {
+  right: auto;
+  left: 1rem;
+  transform: rotate(3deg);
+}
+
+/* AWARD STICKER
+   Used on the Embassy role for Best SNS Supporter. */
+.career-award {
+  position: absolute;
+  right: -20px;
+  bottom: -18px;
+  padding: 0.5rem 0.8rem;
+  background: var(--cream-dark);
+  border: 1px solid var(--accent);
+  font-family: 'Caveat', cursive;
+  color: var(--accent);
+  font-size: 0.95rem;
+  transform: rotate(-4deg);
+}
+
+/* =========================================================
+   PROFESSIONAL DEVELOPMENT CARD
+   Special visual treatment for the Dec 2025 — Aug 2026 period.
+========================================================= */
+
+/* Soft tinted paper background distinguishes this from employment. */
+.professional-development .career-card {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(125, 90, 68, 0.045),
+      transparent 45%
+    ),
+    var(--surface);
+}
+
+/* Hollow timeline marker reinforces that this is a development period. */
+.professional-development .career-dot {
+  background: var(--cream);
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 0 1px var(--cream);
+}
+
+/* Italic specialization line under the card title. */
+.career-subtitle {
+  margin-top: -0.3rem;
+  margin-bottom: 1rem;
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.15rem;
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--accent);
+}
+
+/* LEARN sticker shown above the professional-development card. */
+.professional-development::before {
+  content: 'LEARN';
+  position: absolute;
+  top: -1.2rem;
+  left: 1rem;
+  z-index: 4;
+  padding: 0.28rem 0.6rem;
+  background: var(--accent);
+  color: var(--surface);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  transform: rotate(-4deg);
 }
 
 .contact-section {
@@ -1298,10 +1665,6 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .timeline-item {
-    grid-template-columns: 1fr;
-    gap: 0.45rem;
-  }
   .education-card {
   grid-template-columns: 1fr;
 }
@@ -1310,6 +1673,98 @@ a {
   width: 100%;
   height: 120px;
 }
+  .experience-header {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-note {
+    display: none;
+  }
+
+  /* =======================================================
+     EXPERIENCE — TABLET / MOBILE
+     Collapses the two-column timeline into one readable column.
+  ======================================================= */
+
+  .experience-header {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-note {
+    display: none;
+  }
+
+  .career-timeline {
+    margin-top: 3.5rem;
+    padding-left: 2.4rem;
+  }
+
+  .career-timeline::before {
+    left: 8px;
+  }
+
+  /* Both odd and even cards become one full-width column. */
+  .career-entry:nth-child(odd),
+  .career-entry:nth-child(even) {
+    width: 100%;
+    margin-left: 0;
+    padding-left: 2rem;
+    padding-right: 0;
+    margin-bottom: 4rem;
+  }
+
+  /* Move every timeline dot to the left-side mobile rail. */
+  .career-entry:nth-child(odd) .career-dot,
+  .career-entry:nth-child(even) .career-dot {
+    left: -39px;
+    right: auto;
+  }
+
+  /* Move every connector line to the left-side mobile rail. */
+  .career-entry:nth-child(odd)::after,
+  .career-entry:nth-child(even)::after {
+    left: -30px;
+    right: auto;
+    width: 2rem;
+  }
+
+  /* Put all background numbers in the same top-right position. */
+  .career-entry:nth-child(odd) .career-number,
+  .career-entry:nth-child(even) .career-number {
+    left: auto;
+    right: 1rem;
+    top: -2.2rem;
+    font-size: 5rem;
+  }
+
+  /* Remove card rotation on smaller screens for easier reading. */
+  .career-entry:nth-child(odd) .career-card,
+  .career-entry:nth-child(even) .career-card {
+    transform: rotate(0deg);
+  }
+
+  .career-card {
+    padding: 1.4rem;
+  }
+
+  /* Handwritten notes sit below cards instead of floating outside them. */
+  .career-entry:nth-child(odd) .career-scribble,
+  .career-entry:nth-child(even) .career-scribble {
+    position: static;
+    display: block;
+    margin-top: 1rem;
+    transform: rotate(-1deg);
+  }
+
+  /* Award sticker moves into normal document flow on mobile. */
+  .career-award {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    display: inline-block;
+    margin-top: 1rem;
+  }
+
   .project-gallery.four-images {
   grid-template-columns: 1fr;
 }
